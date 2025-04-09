@@ -6,7 +6,6 @@ import { fetchUser } from '../../supabase/Auth/fetchUser';
 
 const CreateAProblem = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -14,7 +13,6 @@ const CreateAProblem = () => {
 
       const userRole = userData?.user_metadata?.role || null;
       console.log('Fetched role:', userRole);
-      setRole(userRole);
 
       if (userRole !== 'teacher') {
         navigate('/auth');
