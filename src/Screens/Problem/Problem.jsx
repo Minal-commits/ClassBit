@@ -6,7 +6,7 @@ import TestCases from "./TestCases";
 import ProblemHeader from "./ProblemHeader";
 import { executeCode } from "../../ApiCalls/execute";
 import ErrorPage from "./ErrorPage";
-import { getaproblem } from "../../supabase/fetchDataBase/getAProblem";
+import { getAproblem } from "../../supabase/fetchDataBase/getAProblem";
 import PageLoader from "../components/PageLoader";
 import { motion } from "framer-motion";
 import { submitAProblem } from "../../supabase/writeDatabase/submitAProblem";
@@ -152,7 +152,7 @@ const Problem = () => {
     const fetchProblemData = async () => {
       setIsPageLoading(true);
       try {
-        const { problem, testcases, examples } = await getaproblem(problemid);
+        const { problem, testcases, examples } = await getAproblem(problemid);
         setProblem(problem);
         setTestCases(testcases);
         setExamples(examples);
