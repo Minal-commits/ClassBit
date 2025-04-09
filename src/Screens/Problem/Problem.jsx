@@ -6,7 +6,7 @@ import TestCases from "./TestCases";
 import ProblemHeader from "./ProblemHeader";
 import { executeCode } from "../../ApiCalls/execute";
 import ErrorPage from "./ErrorPage";
-import { getaproblem } from "../../supabase/fetchDataBase/getaproblem";
+import { getaproblem } from "../../supabase/fetchDataBase/getAProblem";
 import PageLoader from "../components/PageLoader";
 import { motion } from "framer-motion";
 import { submitAProblem } from "../../supabase/writeDatabase/submitAProblem";
