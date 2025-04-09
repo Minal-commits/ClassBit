@@ -30,7 +30,6 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      // ✅ This rule enforces case-sensitive import paths
       'import/no-unresolved': ['error', { caseSensitive: true }],
     },
   },
