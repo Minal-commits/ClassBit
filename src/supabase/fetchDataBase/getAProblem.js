@@ -2,7 +2,7 @@ import { supabase } from '../supabaseClient';
 import { getALLExamples } from './getALLExamples';
 import { getAllTestcases } from './getALLTestCases';
 
-export const getAproblem = async (problemID) => {
+export const getaproblem = async (problemID) => {
   try {
     const { data: problem, error } = await supabase
       .from('PROBLEMS')
