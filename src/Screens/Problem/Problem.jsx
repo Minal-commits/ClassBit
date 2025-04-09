@@ -11,7 +11,7 @@ import PageLoader from "../components/PageLoader";
 import { motion } from "framer-motion";
 import { submitAProblem } from "../../supabase/writeDatabase/submitAProblem";
 import { fetchUser } from "../../supabase/Auth/fetchUser";
-import { updateRanking } from "../../supabase/updateDataBase/updateranking";
+import { updateRanking } from "../../supabase/updateDataBase/updateRanking";
 
 const Problem = () => {
   const { problemid } = useParams();
