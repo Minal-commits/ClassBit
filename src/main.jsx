@@ -6,12 +6,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomeUi from './Screens/Home/HomeUi.jsx'
 import Contact from './Screens/ContactDev/Contact.jsx'
 import Problems from './Screens/solvableProblems/Problems.jsx'
-import Problem from './Screens/Problem/Problem.jsx'
 import Teacher from './Screens/Teacher/Teacher.jsx'
 import Student from './Screens/Student/Student.jsx'
 import Auth from './Screens/Auth/Auth.jsx'
 import CreateAProblem from './Screens/CreateAProblem/CreateAProblem.jsx'
-
+import Problem from './Screens/Problem/Problem.jsx'
 // const router = createBrowserRouter(
 //   createRoutesFromElements(
 //     <Route path='/' element={<HomeUi/>}>
