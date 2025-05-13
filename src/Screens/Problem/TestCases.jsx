@@ -4,7 +4,7 @@ import SubTestCasePage from "./SubTestCasePage";
 const TestCases = ({ testcases, outputs, isLoading }) => {
 
   return (
-    <div className="w-full h-full p-4 overflow-y-auto bg-gray-100 rounded-lg shadow-md">
+    <div className="w-full h-full p-4 rounded-lg">
       <div className="flex justify-between items-center border-b pb-2">
         <h2 className="text-xl font-semibold text-gray-900">Test Cases</h2>
       </div>

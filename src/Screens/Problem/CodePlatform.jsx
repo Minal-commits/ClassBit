@@ -1,16 +1,34 @@
 import { Editor } from '@monaco-editor/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const CodePlatform = ({ lang, broilerPlateCode, setBroilerPlateCode }) => {
   const [code, setCode] = useState(broilerPlateCode);
+  const editorRef = useRef(null);
 
   useEffect(() => {
-    setCode(broilerPlateCode); // Update code when broilerPlateCode changes
+    setCode(broilerPlateCode);
   }, [broilerPlateCode]);
 
   const handleChange = (newCode) => {
     setCode(newCode);
-    setBroilerPlateCode(newCode); // Update parent state
+    setBroilerPlateCode(newCode);
+  };
+
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+
+    // Disable Ctrl+V / Cmd+V (paste)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV, () => {});
+
+    // Disable Ctrl+C / Cmd+C (copy)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyC, () => {});
+
+    // Block native paste and copy events
+    const domNode = editor.getDomNode();
+    if (domNode) {
+      domNode.addEventListener('paste', (e) => e.preventDefault());
+      domNode.addEventListener('copy', (e) => e.preventDefault());
+    }
   };
 
   return (
@@ -20,8 +38,11 @@ const CodePlatform = ({ lang, broilerPlateCode, setBroilerPlateCode }) => {
         theme="vs-dark"
         language={lang}
         value={code}
-        onChange={handleChange} // Directly pass handleChange
-        
+        onChange={handleChange}
+        onMount={handleEditorDidMount}
+        options={{
+          contextmenu: false, // disable right-click menu
+        }}
       />
     </div>
   );

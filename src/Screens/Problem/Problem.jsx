@@ -51,6 +51,9 @@ const Problem = () => {
   const [iseErrorPageOpen, setIsErrorPageOpen] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isSolved, setIsSolved] = useState(false);
+  const [tabSwitchCount, setTabSwitchCount] = useState(0);
+  const [isRedBackground, setIsRedBackground] = useState(false);
+
 
   const handleLanguageChange = (newLanguage) => {
     setLanguage(newLanguage);
@@ -172,6 +175,65 @@ const Problem = () => {
     setBroilerPlateCode(getBroilerPlateCode(language));
   }, [language]);
 
+
+useEffect(() => {
+  const enterFullScreen = () => {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    }
+  };
+
+  const handleInteraction = () => {
+    // If not in fullscreen, enter fullscreen
+    const isFull =
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.msFullscreenElement;
+
+    if (!isFull) {
+      enterFullScreen();
+    }
+  };
+
+  // Listen for any user interaction to trigger fullscreen
+  window.addEventListener("click", handleInteraction);
+  window.addEventListener("keydown", handleInteraction);
+
+  return () => {
+    window.removeEventListener("click", handleInteraction);
+    window.removeEventListener("keydown", handleInteraction);
+  };
+}, []);
+
+
+useEffect(() => {
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "hidden") {
+      // tab is moved away from
+      setTabSwitchCount((prev) => prev + 1);
+    }
+  };
+
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+
+  return () => {
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
+  };
+}, []);
+
+
+useEffect(() => {
+  if (tabSwitchCount > 1) {
+    setIsRedBackground(true);
+  }
+}, [tabSwitchCount]);
+
+
   if (isPageLoading) {
     return <PageLoader />;
   }
@@ -185,7 +247,7 @@ const Problem = () => {
   }
 
   return (
-    <div className="w-full min-h-[92vh] mt-[8vh]">
+    <div className={`w-full min-h-[92vh] mt-[8vh] ${isRedBackground ? "bg-red-300" : ""}`}>
       <div className="flex w-full h-[6vh]">
         <ProblemHeader
           id={problem.id}
@@ -210,7 +272,7 @@ const Problem = () => {
               <ErrorPage error={error} closeErrorPage={closeErrorPage} />
             </motion.div>
           ) : (
-            <ProblemDescription problem={problem} examples={examples} testcases={testCases} />
+            <ProblemDescription problem={problem} examples={examples} testcases={testCases} tabSwitchCount={tabSwitchCount}/>
           )}
         </div>
         <div className="w-[55%] h-full">

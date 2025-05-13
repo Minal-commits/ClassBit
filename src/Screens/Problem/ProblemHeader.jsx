@@ -9,7 +9,7 @@ const ProblemHeader = ({ id, title, runCode, submitCode, language, setLanguage, 
     navigate(-1)
   )
   return (
-    <div className="w-full flex items-center justify-between px-6 py-4 bg-gray-100 shadow-sm rounded-lg">
+    <div className="w-full flex items-center justify-between px-6 py-4 bg-gray-100 shadow-sm">
       <div className="flex items-center gap-2">
       <div className='p-1 bg-gray-100 shadow-sm shadow-gray-400 rounded-md cursor-pointer mr-2' onClick={handleNavigation}>
         <IconChevronLeft />

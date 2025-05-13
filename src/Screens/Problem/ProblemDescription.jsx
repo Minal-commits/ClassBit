@@ -1,8 +1,8 @@
 import React from "react";
 
-const ProblemDescription = ({ problem, examples, testcases }) => {
+const ProblemDescription = ({ problem, examples, testcases, tabSwitchCount }) => {
   return (
-    <div className="w-full h-full p-6 overflow-y-auto bg-white shadow-md rounded-lg">
+    <div className="w-full h-full p-6 overflow-y-auto shadow-md rounded-lg">
       {/* Title & Metadata */}
       <h1 className="text-2xl font-bold text-gray-900">{problem.ProblemName}</h1>
       <p className="text-lg text-gray-700 mt-2">
@@ -55,6 +55,8 @@ const ProblemDescription = ({ problem, examples, testcases }) => {
           </li>
         ))}
       </ul>
+
+      {tabSwitchCount>0 ? <h2 className="text-2xl font-semibold mt-8 text-red-600">You have moved the tab {tabSwitchCount} times</h2> : null }
     </div>
   );
 };
