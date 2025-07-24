@@ -4,7 +4,6 @@ import ProblemDescription from "./ProblemDescription";
 import CodePlatform from "./CodePlatform";
 import TestCases from "./TestCases";
 import ProblemHeader from "./ProblemHeader";
-import { executeCode } from "../../ApiCalls/execute";
 import ErrorPage from "./ErrorPage";
 import { getAproblem } from "../../supabase/fetchDataBase/getAProblem";
 import PageLoader from "../components/PageLoader";
@@ -12,6 +11,7 @@ import { motion } from "framer-motion";
 import { submitAProblem } from "../../supabase/writeDatabase/submitAProblem";
 import { fetchUser } from "../../supabase/Auth/fetchUser";
 import { updateRanking } from "../../supabase/updateDataBase/updateRanking";
+import { executeCodeViaGemeini } from "../../ApiCalls/executeViaGemini";
 
 const Problem = () => {
   const { problemid } = useParams();
@@ -32,14 +32,6 @@ const Problem = () => {
     { language: "javascript", code: `console.log("Hello, World!");` },
   ];
 
-  const languageForCompilation = [
-    { language: "cpp", version: "10.2.0" },
-    { language: "c", version: "10.2.0" },
-    { language: "java", version: "15.0.2" },
-    { language: "python", version: "3.10.0" },
-    { language: "javascript", version: "18.15.0" },
-  ];
-
   const [language, setLanguage] = useState("cpp");
   const [broilerPlateCode, setBroilerPlateCode] = useState("");
   const [outputs, setOutputs] = useState([]);
@@ -51,12 +43,29 @@ const Problem = () => {
   const [iseErrorPageOpen, setIsErrorPageOpen] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isSolved, setIsSolved] = useState(false);
-  const [tabSwitchCount, setTabSwitchCount] = useState(0);
-  const [isRedBackground, setIsRedBackground] = useState(false);
-
 
   const handleLanguageChange = (newLanguage) => {
     setLanguage(newLanguage);
+  };
+
+  const extractTestCases = (testCases) => {
+    const extractedTestCasesArray = [];
+    testCases.forEach((testCase) => {
+      if (testCase.inputs && testCase.outputs) {
+        extractedTestCasesArray.push({
+          "inputs": testCase.inputs,
+        });
+      }
+    });
+    return JSON.stringify(extractedTestCasesArray);
+  }
+
+  const extractPureOutputArray = async (outputs) => {
+    const cleaned = outputs
+      .replace(/```json|```/g, '') // remove code block tags
+      .replace(/\\n/g, '')         // remove literal \n inside strings
+      .trim();
+    return JSON.parse(cleaned);
   };
 
   const getBroilerPlateCode = (lang) => {
@@ -64,44 +73,22 @@ const Problem = () => {
     return result ? result.code : "";
   };
 
-  const getCompilerVersion = (lang) => {
-    const result = languageForCompilation.find((item) => item.language === lang);
-    return result ? result.version : null;
-  };
 
   const executeCodeFunction = async (language, testCases, code) => {
-    const version = getCompilerVersion(language);
-    if (!version) {
-      console.error("Version not found for language:", language);
+    setIsLoading(true);
+    setIsErrorPageOpen(false);
+    setOutputs([]);
+    const extractedTestCases = extractTestCases(testCases);
+    const res = await executeCodeViaGemeini(code, language, extractedTestCases);
+    const outputArray = await extractPureOutputArray(res);
+    if (outputArray[0]?.startsWith("Error:")) {
+      setIsLoading(false);
+      setError(outputArray[0]);
+      setOutputs([]);
+      setIsErrorPageOpen(true);
       return;
     }
-
-    setIsLoading(true);
-    setOutputs([]);
-
-    const allOutputs = [];
-
-    for (let i = 0; i < testCases.length; i++) {
-      try {
-        const res = await executeCode(language, version, testCases[i].inputs, code);
-        const output = res?.run?.stdout?.trim() || "No output";
-        const err = res?.run?.stderr?.trim();
-
-        if (err) {
-          setError(err);
-          setIsErrorPageOpen(true);
-          break;
-        }
-
-        allOutputs[i] = output;
-      } catch (err) {
-        console.error(`Error executing test case ${i}:`, err);
-        allOutputs[i] = "Error";
-      }
-    }
-
-    console.log("Execution Outputs:", allOutputs);
-    setOutputs(allOutputs);
+    setOutputs(outputArray);
     setIsLoading(false);
   };
 
@@ -112,7 +99,7 @@ const Problem = () => {
       alert("Problem not loaded.");
       return;
     }
-    setIsSolved(false); // reset before running again
+    setIsSolved(false);
     await executeCodeFunction(language, testCases, broilerPlateCode);
   };
 
@@ -122,15 +109,12 @@ const Problem = () => {
       const user = await fetchUser();
       const res = await submitAProblem(user?.id, problemid, broilerPlateCode, isSolved);
       const updateRank = await updateRanking(user?.id, problem?.Point);
-
-      console.log(res, updateRank)
     } else {
       alert("❌ Some test cases failed. Please try again.");
     }
-    setIsPageLoading(false)
+    setIsPageLoading(false);
   };
 
-  // Check outputs against test case expected outputs
   useEffect(() => {
     if (outputs.length === 0 || testCases.length === 0) return;
 
@@ -150,7 +134,6 @@ const Problem = () => {
     }
   }, [outputs]);
 
-  // Fetch problem from DB
   useEffect(() => {
     const fetchProblemData = async () => {
       setIsPageLoading(true);
@@ -170,69 +153,9 @@ const Problem = () => {
     fetchProblemData();
   }, [problemid]);
 
-  // Update boilerplate code on language change
   useEffect(() => {
     setBroilerPlateCode(getBroilerPlateCode(language));
   }, [language]);
-
-
-useEffect(() => {
-  const enterFullScreen = () => {
-    const elem = document.documentElement;
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) {
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen();
-    }
-  };
-
-  const handleInteraction = () => {
-    // If not in fullscreen, enter fullscreen
-    const isFull =
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.msFullscreenElement;
-
-    if (!isFull) {
-      enterFullScreen();
-    }
-  };
-
-  // Listen for any user interaction to trigger fullscreen
-  window.addEventListener("click", handleInteraction);
-  window.addEventListener("keydown", handleInteraction);
-
-  return () => {
-    window.removeEventListener("click", handleInteraction);
-    window.removeEventListener("keydown", handleInteraction);
-  };
-}, []);
-
-
-useEffect(() => {
-  const handleVisibilityChange = () => {
-    if (document.visibilityState === "hidden") {
-      // tab is moved away from
-      setTabSwitchCount((prev) => prev + 1);
-    }
-  };
-
-  document.addEventListener("visibilitychange", handleVisibilityChange);
-
-  return () => {
-    document.removeEventListener("visibilitychange", handleVisibilityChange);
-  };
-}, []);
-
-
-useEffect(() => {
-  if (tabSwitchCount > 1) {
-    setIsRedBackground(true);
-  }
-}, [tabSwitchCount]);
-
 
   if (isPageLoading) {
     return <PageLoader />;
@@ -247,7 +170,7 @@ useEffect(() => {
   }
 
   return (
-    <div className={`w-full min-h-[92vh] mt-[8vh] ${isRedBackground ? "bg-red-300" : ""}`}>
+    <div className="w-full min-h-[92vh] mt-[8vh]">
       <div className="flex w-full h-[6vh]">
         <ProblemHeader
           id={problem.id}
@@ -272,7 +195,11 @@ useEffect(() => {
               <ErrorPage error={error} closeErrorPage={closeErrorPage} />
             </motion.div>
           ) : (
-            <ProblemDescription problem={problem} examples={examples} testcases={testCases} tabSwitchCount={tabSwitchCount}/>
+            <ProblemDescription
+              problem={problem}
+              examples={examples}
+              testcases={testCases}
+            />
           )}
         </div>
         <div className="w-[55%] h-full">

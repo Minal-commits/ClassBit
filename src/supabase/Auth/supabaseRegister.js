@@ -20,7 +20,6 @@ export const signUP = async ({ email, password, name, rollNo, year }) => {
     console.error("Sign-up error:", error.message);
     return { success: false, error: error.message };
   } else {
-    console.log("Signed up user:", data.user);
     return { success: true, user: data.user };
   }
 };

@@ -12,10 +12,13 @@ const HomeUi = () => {
   const handlegetStarted = () =>{
     navigate('/solvableproblems');
   }
+  const handleGithub = () =>{
+    window.open('https://github.com/Minal-commits/ClassBit', '_blank');
+  }
   return (
     <div className='w-full h-full justify-center items-center px-80'>
         <Navbar/>
-        <Hero handlegetStarted={handlegetStarted}/>
+        <Hero handlegetStarted={handlegetStarted} handleGithub={handleGithub}/>
         <Details handlegetStarted={handlegetStarted}/>
         <SolveAssignMents handlegetStarted={handlegetStarted}/>
         <Testimonials/>

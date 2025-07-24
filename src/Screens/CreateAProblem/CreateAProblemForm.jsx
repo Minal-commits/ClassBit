@@ -78,17 +78,12 @@ const CreateAProblemForm = () => {
       return;
     }
 
-    console.log("Form Data:", formData);
 
     const Problem = await addAProblem(formData);
     if (Problem) {
       const problemID = Problem[0].id;
-
-      const addTestCase = await addATestCase(formData.testCases, problemID);
-      console.log("Test Cases Added:", addTestCase);
-
-      const addExample = await addAnExample(formData.examples, problemID);
-      console.log("Examples Added:", addExample);
+      await addATestCase(formData.testCases, problemID);
+      await addAnExample(formData.examples, problemID);
     }
 
     // Reset form after submission

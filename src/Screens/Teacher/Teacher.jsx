@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import TeacherHeader from './TeacherHeader.jsx';
 import StudentsRankings from './StudentsRankings.jsx';
 import { useNavigate } from 'react-router-dom';
-import Footer from '../components/Footer.jsx';
 import { fetchUser } from '../../supabase/Auth/fetchUser.js';
 import { toast } from 'react-toastify';
 import { getRankings } from '../../supabase/fetchDataBase/getRankings.js';
@@ -39,7 +38,6 @@ const Teacher = () => {
     <div className="w-full pt-[9vh]">
       <TeacherHeader handleClick={handleClick} teacherName="Minal" />
       <StudentsRankings students={students} />
-      <Footer />
     </div>
   );
 };

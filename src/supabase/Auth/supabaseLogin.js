@@ -12,7 +12,6 @@ export const signIn = async (email, password) => {
       error: error.message,
     };
   } else {
-    console.log('Logged in user:', data.user);
     localStorage.setItem('user', JSON.stringify(data.user));
     return {
       success: true,

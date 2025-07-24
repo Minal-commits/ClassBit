@@ -81,7 +81,7 @@ const Navbar = () => {
             </>
           )}
 
-          <p className="text-lg font-semibold cursor-pointer hover:text-blue-600 transition">
+          <p onClick={() => window.open('https://github.com/Minal-commits/ClassBit', '_blank')} className="text-lg font-semibold cursor-pointer hover:text-blue-600 transition">
             Contribute
           </p>
         </div>

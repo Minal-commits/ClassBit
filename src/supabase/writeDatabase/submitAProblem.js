@@ -18,7 +18,6 @@ export const submitAProblem = async (user, problem, code, isSolved) => {
 
   if (existing) {
     // Problem already submitted — optionally update or skip
-    console.log("Problem already submitted by user. Skipping insert.");
     alert("You've already submitted this problem.");
     return existing;
   }

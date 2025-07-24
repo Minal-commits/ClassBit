@@ -12,7 +12,6 @@ const CreateAProblem = () => {
       const userData = await fetchUser();
 
       const userRole = userData?.user_metadata?.role || null;
-      console.log('Fetched role:', userRole);
 
       if (userRole !== 'teacher') {
         navigate('/auth');

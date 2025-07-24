@@ -2,7 +2,7 @@ import codeImage from '../../assets/code.png'
 import CustomButton from '../components/CustomButton'
 // import { useNavigate } from 'react-router-dom'
 
-const Hero = ({handlegetStarted}) => {
+const Hero = ({handlegetStarted, handleGithub}) => {
   // const navigate = useNavigate();
   // const { user } = useUser();
   // const  signIn  = useSignIn();
@@ -18,7 +18,7 @@ const Hero = ({handlegetStarted}) => {
       </div>
       <div className='flex gap-4 mt-2'>
         <CustomButton title='Get Started' color='#399f4b' onClick={handlegetStarted} />
-        <CustomButton title='github' />
+        <CustomButton title='github' color='#333' onClick={handleGithub} />
       </div>
       <div className='mt-[4%]'>
         <img src={codeImage} alt="" className='h-[45vh] rounded-lg shadow-xl' />

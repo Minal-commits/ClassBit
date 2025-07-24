@@ -28,10 +28,8 @@ const Problems = () => {
       const formattedTopics = allTopics.map(topic => topic.Name);
       setTopics(formattedTopics);
       const user = await fetchUser();
-      console.log(user)
       const allProblems = await getAllProblems();
       const fetchedSolvedProblems = await getSolvedProblemsList(user?.id);
-      console.log('solved Problems: ', fetchedSolvedProblems);
       setSolvedProblems(fetchedSolvedProblems);
       setProblems(allProblems);
       setPageLoading(false);

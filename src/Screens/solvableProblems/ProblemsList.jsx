@@ -16,7 +16,6 @@ const ProblemsList = ({ problems, solvedProblems }) => {
 
   const handleNavigation = (id) => {
     navigate(`/problem/${id}`);
-    console.log("clicked", id);
   };
 
   return (
