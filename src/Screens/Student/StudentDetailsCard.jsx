@@ -1,7 +1,7 @@
 
 const StudentDetailsCard = ({studentDetails,listOfProblems}) => {
   return (
-    <div className='w-full min-h-[50%] rounded-md px-10 py-8 text-xl font-semibold'>
+    <div className='w-full min-h-[50%] bg-amber-200 rounded-md px-10 py-8 text-xl font-semibold'>
         <div>
             <p>Name: {studentDetails?.full_name}</p>
             <p>Year: {studentDetails?.year}</p>
