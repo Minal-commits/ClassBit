@@ -67,7 +67,7 @@ const Student = () => {
           <StudentDetailsCard studentDetails={studentDetails} listOfProblems={difficultyList}/>
           <QuoteCard quote="Solving problems increases your skill"/>
         </div>
-        {solvedProblemsList.length>0 ? (<div className='min-w-[70%] h-full'>
+        {solvedProblemsList?.length>0 ? (<div className='min-w-[70%] h-full'>
           <Solvedproblems solvedProblemsList={solvedProblemsList}/>
         </div>) : 
         (

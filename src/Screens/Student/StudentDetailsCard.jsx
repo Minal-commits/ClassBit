@@ -7,13 +7,13 @@ const StudentDetailsCard = ({studentDetails,listOfProblems}) => {
             <p>Year: {studentDetails?.year}</p>
         </div>
         {listOfProblems?.easy>0 ? (
-            <p>Easy: {listOfProblems.easy}</p>
+            <p>Easy: {listOfProblems?.easy}</p>
         ):null}
         {listOfProblems?.medium>0 ? (
                 <p>Medium: {listOfProblems.medium}</p>
         ):null}
         {listOfProblems?.hard>0 ? (
-            <p>Hard: {listOfProblems.hard}</p>
+            <p>Hard: {listOfProblems?.hard}</p>
         ):null}
     </div>
   )
