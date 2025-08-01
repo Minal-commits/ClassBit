@@ -70,6 +70,13 @@ const Navbar = () => {
                 Profile
               </Link>
 
+              <Link
+                to="/rankings"
+                className="text-lg font-semibold cursor-pointer hover:text-blue-600 transition"
+              >
+                Rankings
+              </Link>
+
               {role === "teacher" && (
                 <Link
                   to="/createaproblem"

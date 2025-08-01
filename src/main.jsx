@@ -11,6 +11,7 @@ import Student from './Screens/Student/Student.jsx'
 import Auth from './Screens/Auth/Auth.jsx'
 import CreateAProblem from './Screens/CreateAProblem/CreateAProblem.jsx'
 import Problem from './Screens/Problem/Problem.jsx'
+import Rankings from './Screens/Rankings/Rankings.jsx'
 // const router = createBrowserRouter(
 //   createRoutesFromElements(
 //     <Route path='/' element={<HomeUi/>}>
@@ -32,21 +33,13 @@ const router = createBrowserRouter([
       { path: "problem/:problemid", element: <Problem /> },
       { path: "createaproblem", element: <CreateAProblem/> },
       { path: "teacher", element: <Teacher/> },
-      { path: "student", element: <Student/> }
+      { path: "student", element: <Student/> },
+      { path: "rankings", element: <Rankings/> }
     ],
   },
   { path: "/", element: <HomeUi/>},
   { path: "auth", element: <Auth /> }
 ]);
-
-
-
-// const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
-
-
-// if (!PUBLISHABLE_KEY) {
-//   throw new Error("Missing Publishable Key")
-// }
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

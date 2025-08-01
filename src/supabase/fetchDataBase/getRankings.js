@@ -4,7 +4,7 @@ export const getRankings = async () => {
   const { data, error } = await supabase
     .from('rankings')
     .select('*')
-    .order('points', { ascending: false }); // Optional: sort by points
+    .order('number_of_solved_problems', { ascending: false });
 
   if (error) {
     console.error("Error fetching rankings:", error);

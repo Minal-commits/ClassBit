@@ -6,33 +6,30 @@ import Solvedproblems from './Solvedproblems.jsx'
 import getProfileDetails from '../../supabase/fetchDataBase/getProfileDetails.js'
 import getSolvedProblemsList from '../../supabase/fetchDataBase/getSolveProblemsList.js'
 import PageLoader from '../components/PageLoader.jsx'
+import CustomButton from '../components/CustomButton.jsx'
+import { useNavigate } from 'react-router-dom'
 
 
 const Student = () => {
-  const difficulty = {
-    easy: 24,
-    medium: 24,
-    hard: 24
-  }
   const [studentDetails, setStudentDetails] = useState({});
   const [solvedProblemsList, setSolvedProblemsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [difficultyList, setDifficultyList] = useState({})
+  const [difficultyList, setDifficultyList] = useState({});
+  const navigate = useNavigate();
   const getStudent = async () => {
       const user = await getProfileDetails();
       setStudentDetails(user);
   }
+
   const getProblems = async () =>{
     const problemsList = await getSolvedProblemsList();
     getDifficulties(problemsList);
 
     setSolvedProblemsList(problemsList);
   }
+
   const getDifficulties = async (problemsArray) => {
     let easy = 0, medium = 0, hard = 0;
-
-    // console.log("I am called", problemsArray);
-
     await problemsArray.forEach((problem) => {
       if (problem.Difficulty === "Easy") {
         easy++;
@@ -44,20 +41,19 @@ const Student = () => {
     });
 
     setDifficultyList({ easy, medium, hard });
-    console.log("List: ", easy, medium, hard);
   };
-    useEffect(()=>{
-      const fetchAllData = async () => {
-        setIsLoading(true);
-        await getStudent();
-        await getProblems();
-        setIsLoading(false);
-      };
 
-      fetchAllData();
-    }, [setStudentDetails, setSolvedProblemsList])
+  useEffect(()=>{
+    const fetchAllData = async () => {
+      setIsLoading(true);
+      await getStudent();
+      await getProblems();
+      setIsLoading(false);
+    };
+    fetchAllData();
+  }, [setStudentDetails, setSolvedProblemsList])
 
-    if(isLoading) return <PageLoader/>
+  if(isLoading) return <PageLoader/>
 
   return (
     <div className='w-full pt-[9vh]'>
@@ -66,6 +62,7 @@ const Student = () => {
         <div className='min-w-[30%] h-full flex flex-col gap-4'>
           <StudentDetailsCard studentDetails={studentDetails} listOfProblems={difficultyList}/>
           <QuoteCard quote="Solving problems increases your skill"/>
+          <CustomButton title="View Rankings" onClick={() => navigate('/rankings')} />
         </div>
         {solvedProblemsList?.length>0 ? (<div className='min-w-[70%] h-full'>
           <Solvedproblems solvedProblemsList={solvedProblemsList}/>

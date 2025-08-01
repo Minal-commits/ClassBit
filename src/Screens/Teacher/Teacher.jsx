@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import TeacherHeader from './TeacherHeader.jsx';
-import StudentsRankings from './StudentsRankings.jsx';
 import { useNavigate } from 'react-router-dom';
 import { fetchUser } from '../../supabase/Auth/fetchUser.js';
 import { toast } from 'react-toastify';
 import { getRankings } from '../../supabase/fetchDataBase/getRankings.js';
+import StudentsRankings from '../components/StudentsRankings.jsx';
 
 const Teacher = () => {
   const [students, setStudents] = useState([]);
