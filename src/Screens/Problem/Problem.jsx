@@ -12,6 +12,7 @@ import { submitAProblem } from "../../supabase/writeDatabase/submitAProblem";
 import { fetchUser } from "../../supabase/Auth/fetchUser";
 import { updateRanking } from "../../supabase/updateDataBase/updateRanking";
 import { executeCodeViaGemeini } from "../../ApiCalls/executeViaGemini";
+import { toast } from "react-toastify";
 
 const Problem = () => {
   const { problemid } = useParams();
@@ -61,11 +62,17 @@ const Problem = () => {
   }
 
   const extractPureOutputArray = async (outputs) => {
-    const cleaned = outputs
-      .replace(/```json|```/g, '') // remove code block tags
-      .replace(/\\n/g, '')         // remove literal \n inside strings
-      .trim();
-    return JSON.parse(cleaned);
+    try {
+      const cleaned = outputs
+        .replace(/```json|```/g, '')
+        .replace(/\\n/g, '')
+        .replace(/`/g, '')
+        .trim();
+      return JSON.parse(cleaned);
+    } catch (error) {
+      console.error("Failed to parse JSON:", cleaned);
+      throw error;
+    }
   };
 
   const getBroilerPlateCode = (lang) => {
@@ -96,6 +103,7 @@ const Problem = () => {
 
   const runCode = async () => {
     if (!problem) {
+      toast.error("Problem not loaded.");
       alert("Problem not loaded.");
       return;
     }
@@ -111,6 +119,7 @@ const Problem = () => {
       const updateRank = await updateRanking(user?.id, problem?.Point);
     } else {
       alert("❌ Some test cases failed. Please try again.");
+      toast.error("❌ Some test cases failed. Please try again.");
     }
     setIsPageLoading(false);
   };
@@ -127,9 +136,11 @@ const Problem = () => {
 
     if (allMatched) {
       console.log("🎉 All outputs matched!");
+      toast.success("🎉 All outputs matched!");
       setIsSolved(true);
     } else {
-      console.log("❌ Some test cases failed.");
+      console.log("❌Some test cases failed.");
+      toast.error("Test case failed!");
       setIsSolved(false);
     }
   }, [outputs]);
