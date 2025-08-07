@@ -4,6 +4,7 @@ import CustomButton from "./CustomButton";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchUser } from "../../supabase/Auth/fetchUser";
 import { signOut } from "../../supabase/Auth/signOut";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const location = useLocation();
@@ -32,6 +33,7 @@ const Navbar = () => {
   const handleSignOut = async () => {
     setSigningOut(true);
     await signOut();
+    toast.success("Successfully signed out!");
     setSigningOut(false);
     navigate("/auth");
   };

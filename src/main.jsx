@@ -12,6 +12,7 @@ import Auth from './Screens/Auth/Auth.jsx'
 import CreateAProblem from './Screens/CreateAProblem/CreateAProblem.jsx'
 import Problem from './Screens/Problem/Problem.jsx'
 import Rankings from './Screens/Rankings/Rankings.jsx'
+import { ToastContainer } from 'react-toastify'
 // const router = createBrowserRouter(
 //   createRoutesFromElements(
 //     <Route path='/' element={<HomeUi/>}>
@@ -44,5 +45,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router}/>
+    <ToastContainer position="top-right" />
   </StrictMode>,
 )
