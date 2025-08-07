@@ -5,6 +5,7 @@ import Navbar from '../../components/Navbar';
 import { signUP } from '../../../supabase/Auth/supabaseRegister';
 import PageLoader from '../../components/PageLoader';
 import { toast, ToastContainer } from 'react-toastify';
+import { IconEye, IconEyeClosed } from '@tabler/icons-react';
 
 
 const Register = ({ setOnSignInPage }) => {
@@ -14,6 +15,8 @@ const Register = ({ setOnSignInPage }) => {
   const [rollNo, setRollNo] = useState('');
   const [year, setYear] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,13 +61,21 @@ const Register = ({ setOnSignInPage }) => {
           </div>
           <div className="flex flex-col">
             <label className="text-gray-600 font-medium text-xl">Password:</label>
+            <div className='w-full flex items-center justify-center'>
             <input 
-              type="password" 
+              type={isPasswordVisible ? "text" : "password" }
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 py-2 border-b outline-none" 
+              className="mt-1 py-2 border-b outline-none w-full" 
               placeholder="Enter your password"
             />
+            <div 
+              onClick={()=> (setIsPasswordVisible((prev)=> !prev))}
+              className='absolute right-[47%] cursor-pointer'
+            >
+              {isPasswordVisible ? <IconEyeClosed/> : <IconEye/>}
+            </div>
+          </div>
           </div>
           <div className="flex flex-col">
             <label className="text-gray-600 font-medium text-xl">Name:</label>
